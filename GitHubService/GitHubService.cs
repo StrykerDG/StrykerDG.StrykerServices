@@ -13,8 +13,13 @@ namespace StrykerDG.StrykerServices.GitHubService
             IHttpClientFactory clientFactory, 
             string token,
             string userAgent
-        ) : base(clientFactory, token) 
+        ) : base(clientFactory) 
         {
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = Convert.ToBase64String(tokenBytes);
+
+            Client.BaseAddress = new Uri("https://api.github.com");
+            Client.DefaultRequestHeaders.Add("Authentication", encodedToken);
             Client.DefaultRequestHeaders.Add("User-Agent", userAgent);
         }
     }

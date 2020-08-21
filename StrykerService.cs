@@ -13,15 +13,9 @@ namespace StrykerDG.StrykerServices
     {
         public HttpClient Client { get; set; }
 
-        public StrykerService(IHttpClientFactory clientFactory, string token)
+        public StrykerService(IHttpClientFactory clientFactory)
         {
             Client = clientFactory.CreateClient();
-            Client.BaseAddress = new Uri("https://api.github.com");
-
-            var tokenBytes = Encoding.UTF8.GetBytes(token);
-            var encodedToken = Convert.ToBase64String(tokenBytes);
-
-            Client.DefaultRequestHeaders.Add("Authentication", encodedToken);
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
