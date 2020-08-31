@@ -41,9 +41,20 @@ namespace StrykerDG.StrykerServices
             throw new NotImplementedException();
         }
 
-        public async Task<StrykerServiceResponse> Post(string endpoint, object payload)
+        public async Task<StrykerServiceResponse> Post(string endpoint, object payload = null)
         {
-            throw new NotImplementedException();
+            var content = payload != null
+                ? JsonConvert.SerializeObject(payload)
+                : null;
+
+            var response = Client.PostAsync(endpoint, new StringContent(content)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return StrykerServiceResponse.Success(result);
+            }
+            else
+                return StrykerServiceResponse.Failure(response.Content);
         }
     }
 }
